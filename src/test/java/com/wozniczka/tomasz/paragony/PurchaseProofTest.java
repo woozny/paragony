@@ -14,7 +14,7 @@ public class PurchaseProofTest {
 
 	private static final String HEADPHONES = "Headphones";
 	private static final String INVOICE_IMAGE_PATH = "/home/tomek/IdeaProjects/paragony/src/test/TestResources/427572.jpg";
-	private static final String INCORRECT_INVOICE_IMAGE_PATH = "test427572.jpg";
+	//private static final String INCORRECT_INVOICE_IMAGE_PATH = "test427572.jpg";
 	private static final int PRICE = 400;
 	private final BufferedImage sampleInvoiceImage = loadInvoiceImage(INVOICE_IMAGE_PATH);
 	private PurchaseProof purchaseProof;
