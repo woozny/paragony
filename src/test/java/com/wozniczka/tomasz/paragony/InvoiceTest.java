@@ -10,48 +10,48 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PurchaseProofTest {
+public class InvoiceTest {
 
 	private static final String HEADPHONES = "Headphones";
 	private static final String INVOICE_IMAGE_PATH = "/home/tomek/IdeaProjects/paragony/src/test/TestResources/427572.jpg";
 	//private static final String INCORRECT_INVOICE_IMAGE_PATH = "test427572.jpg";
 	private static final int PRICE = 400;
 	private final BufferedImage sampleInvoiceImage = loadInvoiceImage(INVOICE_IMAGE_PATH);
-	private PurchaseProof purchaseProof;
+	private Invoice invoice;
 
 	@Before
 	public void setUp() {
-		purchaseProof = new PurchaseProof();
+		invoice = new Invoice();
 	}
 
 	@Test
 	public void shouldBeAbleToAddProductName() {
-		purchaseProof.setProductName(HEADPHONES);
+		invoice.setProductName(HEADPHONES);
 
-		assertThat(purchaseProof.getProductName()).isEqualTo(HEADPHONES);
+		assertThat(invoice.getProductName()).isEqualTo(HEADPHONES);
 	}
 
 	@Test
 	public void shouldBeAbleToAddProductPrice() {
-		purchaseProof.setProductPrice(PRICE);
+		invoice.setProductPrice(PRICE);
 
-		assertThat(purchaseProof.getProductPrice()).isEqualTo(PRICE);
+		assertThat(invoice.getProductPrice()).isEqualTo(PRICE);
 	}
 
 	@Test
 	public void shouldBeAbleToAddGuaranteePeriod() {
-		purchaseProof.setGuaranteePeriod(2);
+		invoice.setGuaranteePeriod(2);
 
-		assertThat(purchaseProof.getGuaranteePeriod()).isEqualTo(2);
+		assertThat(invoice.getGuaranteePeriod()).isEqualTo(2);
 	}
 
 	@Test
 	public void shouldBeAbleToAddScannedInvoice() {
-		purchaseProof.addInvoiceImage(INVOICE_IMAGE_PATH);
+		invoice.addInvoiceImage(INVOICE_IMAGE_PATH);
 
-		assertThat(purchaseProof.getInvoiceImage().getHeight()).isEqualTo(sampleInvoiceImage.getHeight());
-		assertThat(purchaseProof.getInvoiceImage().getWidth()).isEqualTo(sampleInvoiceImage.getWidth());
-		assertThat(purchaseProof.getInvoiceImage().getType()).isEqualTo(sampleInvoiceImage.getType());
+		assertThat(invoice.getInvoiceImage().getHeight()).isEqualTo(sampleInvoiceImage.getHeight());
+		assertThat(invoice.getInvoiceImage().getWidth()).isEqualTo(sampleInvoiceImage.getWidth());
+		assertThat(invoice.getInvoiceImage().getType()).isEqualTo(sampleInvoiceImage.getType());
 	}
 
 //TODO: test for exception when image does not exists

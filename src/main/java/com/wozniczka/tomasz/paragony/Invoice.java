@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class PurchaseProof {
+public class Invoice {
 	private String productName;
 	private int productPrice;
 	private int guaranteePeriod;

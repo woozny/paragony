@@ -39,6 +39,22 @@ public class EmbeddedDatabaseConnection {
 		}
 	}
 
+	public static String getTableName() {
+		return TABLE_NAME;
+	}
+
+	public static String getProductNameColumn() {
+		return PRODUCT_NAME_COLUMN;
+	}
+
+	public static String getProductPriceColumn() {
+		return PRODUCT_PRICE_COLUMN;
+	}
+
+	public static String getGuaranteeColumn() {
+		return GUARANTEE_COLUMN;
+	}
+
 	public Connection connectToDatabase() {
 		try {
 			connection = DriverManager.getConnection(PROTOCOL + DB_NAME + ";create=true");
@@ -95,5 +111,9 @@ public class EmbeddedDatabaseConnection {
 
 	public Statement getStatement() {
 		return statement;
+	}
+
+	public Connection getConnection() {
+		return connection;
 	}
 }
