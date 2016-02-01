@@ -1,5 +1,7 @@
 package com.wozniczka.tomasz.paragony;
 
+import com.sun.image.codec.jpeg.ImageFormatException;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,6 +20,7 @@ public class Invoice {
 	private int guaranteePeriod;
 	private Date purchaseDate;
 	private BufferedImage invoiceImage;
+	private String imageFormat = "jpg";
 
 	public String getProductName() {
 		return productName;
@@ -66,7 +69,34 @@ public class Invoice {
 
 
 	public void addInvoiceImage(String invoiceImagePath) {
+		setImageFormat(invoiceImagePath);
 		invoiceImage = loadInvoiceImage(invoiceImagePath);
+	}
+
+	public void addInvoiceImage(BufferedImage image) {
+		invoiceImage = image;
+	}
+
+	public void writeInvoiceImageToDisk(String writePath) {
+		File file = new File(writePath + "." + imageFormat);
+		try {
+			ImageIO.write(invoiceImage, imageFormat, file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public String getImageFormat() {
+		return imageFormat;
+	}
+
+	private void setImageFormat(String imagePath) {
+		if (imagePath.contains(".")) {
+			imageFormat = imagePath.substring(imagePath.lastIndexOf('.') + 1);
+		} else {
+			throw new ImageFormatException("Unable to find file extension");
+		}
 	}
 
 	private BufferedImage loadInvoiceImage(String imagePath) {

@@ -2,6 +2,12 @@ package com.wozniczka.tomasz.paragony.DatabaseResources;
 
 import com.wozniczka.tomasz.paragony.Invoice;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +19,8 @@ public class InvoicesDAO {
 	private static final String PRODUCT_PRICE_COLUMN = "product_price";
 	private static final String PURCHASE_DATE_COLUMN = "purchase_date";
 	private static final String GUARANTEE_COLUMN = "guarantee_period";
+	private static final String INVOICE_IMAGE_COLUMN = "invoice_image";
+	private static final String ID_COLUMN = "id";
 
 	private static PreparedStatement psInsert;
 	private static PreparedStatement psUpdate;
@@ -40,6 +48,7 @@ public class InvoicesDAO {
 		psInsert.setString(2, invoice.getProductName());
 		psInsert.setInt(3, invoice.getProductPrice());
 		psInsert.setInt(4, invoice.getGuaranteePeriod());
+		psInsert.setBlob(5, convertImageToBlob(invoice.getInvoiceImage(), invoice.getImageFormat()));
 		//psInsert.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
 		psInsert.executeUpdate();
 
@@ -52,11 +61,11 @@ public class InvoicesDAO {
 		List<Invoice> invoices = new ArrayList<>();
 
 		resultSet = statement.executeQuery(
-				"SELECT id, " +
+				"SELECT " + ID_COLUMN + ", " +
 						PRODUCT_NAME_COLUMN + ", " +
 						PRODUCT_PRICE_COLUMN + ", " +
-						GUARANTEE_COLUMN +
-						//PURCHASE_DATE_COLUMN +
+						GUARANTEE_COLUMN + ", " +
+						INVOICE_IMAGE_COLUMN +
 						" FROM " + TABLE_NAME + " ORDER BY id"
 		);
 
@@ -66,6 +75,7 @@ public class InvoicesDAO {
 			invoice.setProductName(resultSet.getString(PRODUCT_NAME_COLUMN));
 			invoice.setProductPrice(resultSet.getInt(PRODUCT_PRICE_COLUMN));
 			invoice.setGuaranteePeriod(resultSet.getInt(GUARANTEE_COLUMN));
+			invoice.addInvoiceImage(convertBlobToBufferedImage(resultSet.getBlob(INVOICE_IMAGE_COLUMN)));
 			//invoice.setPurchaseDate(resultSet.getString(PURCHASE_DATE_COLUMN));
 
 			invoices.add(invoice);
@@ -79,7 +89,7 @@ public class InvoicesDAO {
 		//TODO: Add column for images
 		//TODO: Add column purchase date
 
-		statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int)");
+		statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int, " + INVOICE_IMAGE_COLUMN + " BLOB)");
 		//statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int, " + PURCHASE_DATE_COLUMN + " date)");
 		System.out.println("Created table " + TABLE_NAME);
 		connection.commit();
@@ -89,7 +99,7 @@ public class InvoicesDAO {
 
 	private void configureInsertStatement() {
 		try {
-			psInsert = connection.prepareStatement("insert into " + TABLE_NAME + " values (?, ?, ?, ?)");
+			psInsert = connection.prepareStatement("insert into " + TABLE_NAME + " values (?, ?, ?, ?, ?)");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -97,6 +107,26 @@ public class InvoicesDAO {
 
 	private Date convertJavaDateToSqlDate(java.util.Date purchaseDate) {
 		return new Date(purchaseDate.getTime());
+	}
+
+	private InputStream convertImageToBlob(BufferedImage image, String imageFormat) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(image, imageFormat, baos);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new ByteArrayInputStream(baos.toByteArray());
+	}
+
+	private BufferedImage convertBlobToBufferedImage(Blob imageInBlobFormat) throws SQLException {
+		BufferedImage bufferedImage = null;
+		try {
+			bufferedImage = ImageIO.read(imageInBlobFormat.getBinaryStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bufferedImage;
 	}
 
 
