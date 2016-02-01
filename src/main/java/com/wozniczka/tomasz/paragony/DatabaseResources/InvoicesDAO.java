@@ -3,6 +3,8 @@ package com.wozniczka.tomasz.paragony.DatabaseResources;
 import com.wozniczka.tomasz.paragony.Invoice;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InvoicesDAO {
 	private static PreparedStatement psInsert;
@@ -35,13 +37,28 @@ public class InvoicesDAO {
 	}
 
 	public void selectAllInvoicesFormDB() throws SQLException {
+		List<Invoice> invoices = new ArrayList<>();
+
 		resultSet = statement.executeQuery(
 				"SELECT num, " +
 						EmbeddedDatabaseConnection.getProductNameColumn() + ", " +
 						EmbeddedDatabaseConnection.getProductPriceColumn() + ", " +
 						EmbeddedDatabaseConnection.getGuaranteeColumn() +
+						EmbeddedDatabaseConnection.getPurchaseDateColumnName() +
 						" FROM location ORDER BY num"
 		);
+
+		while (resultSet.next()) {
+			Invoice invoice = new Invoice();
+
+			invoice.setProductName(EmbeddedDatabaseConnection.getProductNameColumn());
+			invoice.setProductName(EmbeddedDatabaseConnection.getProductPriceColumn());
+			invoice.setProductName(EmbeddedDatabaseConnection.getGuaranteeColumn());
+			//invoice.setProductName(EmbeddedDatabaseConnection.getPurchaseDateColumnName());
+
+			invoices.add(invoice);
+		}
+
 	}
 
 	private void configureInsertStatement() {

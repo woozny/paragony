@@ -15,8 +15,6 @@ public class EmbeddedDatabaseConnection {
 	private static final String GUARANTEE_COLUMN = "guarantee_period";
 	private Connection connection;
 	private Statement statement;
-
-
 	public EmbeddedDatabaseConnection() {
 		try {
 			connection = connectToDatabase();
@@ -24,6 +22,10 @@ public class EmbeddedDatabaseConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static String getPurchaseDateColumnName() {
+		return PURCHASE_DATE;
 	}
 
 	public static void printSQLException(SQLException e) {
