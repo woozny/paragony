@@ -7,6 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InvoicesDAO {
+
+	private static final String TABLE_NAME = "invoices";
+	private static final String PRODUCT_NAME_COLUMN = "product_name";
+	private static final String PRODUCT_PRICE_COLUMN = "product_price";
+	private static final String PURCHASE_DATE_COLUMN = "purchase_date";
+	private static final String GUARANTEE_COLUMN = "guarantee_period";
+
 	private static PreparedStatement psInsert;
 	private static PreparedStatement psUpdate;
 	private static PreparedStatement psSelectAll;
@@ -20,6 +27,11 @@ public class InvoicesDAO {
 		this.dbConnection = dbConnection;
 		statement = dbConnection.getStatement();
 		connection = dbConnection.getConnection();
+		try {
+			createTable();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		configureInsertStatement();
 	}
 
@@ -41,20 +53,20 @@ public class InvoicesDAO {
 
 		resultSet = statement.executeQuery(
 				"SELECT id, " +
-						EmbeddedDatabaseConnection.getProductNameColumn() + ", " +
-						EmbeddedDatabaseConnection.getProductPriceColumn() + ", " +
-						EmbeddedDatabaseConnection.getGuaranteeColumn() +
-						//EmbeddedDatabaseConnection.getPurchaseDateColumnName() +
-						" FROM " + EmbeddedDatabaseConnection.getTableName() + " ORDER BY id"
+						PRODUCT_NAME_COLUMN + ", " +
+						PRODUCT_PRICE_COLUMN + ", " +
+						GUARANTEE_COLUMN +
+						//PURCHASE_DATE_COLUMN +
+						" FROM " + TABLE_NAME + " ORDER BY id"
 		);
 
 		while (resultSet.next()) {
 			Invoice invoice = new Invoice();
 
-			invoice.setProductName(resultSet.getString(EmbeddedDatabaseConnection.getProductNameColumn()));
-			invoice.setProductPrice(resultSet.getInt(EmbeddedDatabaseConnection.getProductPriceColumn()));
-			invoice.setGuaranteePeriod(resultSet.getInt(EmbeddedDatabaseConnection.getGuaranteeColumn()));
-			//invoice.setPurchaseDate(resultSet.getString(EmbeddedDatabaseConnection.getGuaranteeColumn()));
+			invoice.setProductName(resultSet.getString(PRODUCT_NAME_COLUMN));
+			invoice.setProductPrice(resultSet.getInt(PRODUCT_PRICE_COLUMN));
+			invoice.setGuaranteePeriod(resultSet.getInt(GUARANTEE_COLUMN));
+			//invoice.setPurchaseDate(resultSet.getString(PURCHASE_DATE_COLUMN));
 
 			invoices.add(invoice);
 		}
@@ -63,10 +75,21 @@ public class InvoicesDAO {
 
 	}
 
+	private void createTable() throws SQLException {
+		//TODO: Add column for images
+		//TODO: Add column purchase date
+
+		statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int)");
+		//statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int, " + PURCHASE_DATE_COLUMN + " date)");
+		System.out.println("Created table " + TABLE_NAME);
+		connection.commit();
+
+	}
+
 
 	private void configureInsertStatement() {
 		try {
-			psInsert = connection.prepareStatement("insert into " + EmbeddedDatabaseConnection.getTableName() + " values (?, ?, ?, ?)");
+			psInsert = connection.prepareStatement("insert into " + TABLE_NAME + " values (?, ?, ?, ?)");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

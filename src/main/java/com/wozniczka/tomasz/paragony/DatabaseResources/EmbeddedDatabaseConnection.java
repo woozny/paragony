@@ -8,19 +8,10 @@ import java.sql.Statement;
 public class EmbeddedDatabaseConnection {
 	private static final String DB_NAME = "derbyDB"; // the name of the database
 	private static final String PROTOCOL = "jdbc:derby:";
-	private static final String TABLE_NAME = "invoices";
-	private static final String PRODUCT_NAME_COLUMN = "product_name";
-	private static final String PRODUCT_PRICE_COLUMN = "product_price";
-	private static final String PURCHASE_DATE = "purchase_date";
-	private static final String GUARANTEE_COLUMN = "guarantee_period";
 	private Connection connection;
 	private Statement statement;
 	public EmbeddedDatabaseConnection() {
 		connection = connectToDatabase();
-	}
-
-	public static String getPurchaseDateColumnName() {
-		return PURCHASE_DATE;
 	}
 
 	public static void printSQLException(SQLException e) {
@@ -37,22 +28,6 @@ public class EmbeddedDatabaseConnection {
 		}
 	}
 
-	public static String getTableName() {
-		return TABLE_NAME;
-	}
-
-	public static String getProductNameColumn() {
-		return PRODUCT_NAME_COLUMN;
-	}
-
-	public static String getProductPriceColumn() {
-		return PRODUCT_PRICE_COLUMN;
-	}
-
-	public static String getGuaranteeColumn() {
-		return GUARANTEE_COLUMN;
-	}
-
 	public Connection connectToDatabase() {
 		try {
 			connection = DriverManager.getConnection(PROTOCOL + DB_NAME + ";create=true");
@@ -63,24 +38,13 @@ public class EmbeddedDatabaseConnection {
 
 			connection.setAutoCommit(false);
 
-			createTable();
+			statement = connection.createStatement();
 
-			System.out.println("Committed the transaction");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return connection;
-	}
-
-	private void createTable() throws SQLException {
-		//TODO: Add column for images
-		statement = connection.createStatement();
-		statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int)");
-		//statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int, " + PURCHASE_DATE + " date)");
-		System.out.println("Created table " + TABLE_NAME);
-		connection.commit();
-
 	}
 
 	public void closeConnection() {
