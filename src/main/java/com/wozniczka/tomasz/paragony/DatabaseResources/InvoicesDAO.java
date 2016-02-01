@@ -28,7 +28,7 @@ public class InvoicesDAO {
 		psInsert.setString(2, invoice.getProductName());
 		psInsert.setInt(3, invoice.getProductPrice());
 		psInsert.setInt(4, invoice.getGuaranteePeriod());
-		psInsert.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
+		//psInsert.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
 		psInsert.executeUpdate();
 
 		connection.commit();
@@ -36,30 +36,33 @@ public class InvoicesDAO {
 		System.out.println("New invoice added to DB");
 	}
 
-	public void selectAllInvoicesFormDB() throws SQLException {
+	public List<Invoice> selectAllInvoicesFormDB() throws SQLException {
 		List<Invoice> invoices = new ArrayList<>();
 
 		resultSet = statement.executeQuery(
-				"SELECT num, " +
+				"SELECT id, " +
 						EmbeddedDatabaseConnection.getProductNameColumn() + ", " +
 						EmbeddedDatabaseConnection.getProductPriceColumn() + ", " +
 						EmbeddedDatabaseConnection.getGuaranteeColumn() +
-						EmbeddedDatabaseConnection.getPurchaseDateColumnName() +
-						" FROM location ORDER BY num"
+						//EmbeddedDatabaseConnection.getPurchaseDateColumnName() +
+						" FROM " + EmbeddedDatabaseConnection.getTableName() + " ORDER BY id"
 		);
 
 		while (resultSet.next()) {
 			Invoice invoice = new Invoice();
 
-			invoice.setProductName(EmbeddedDatabaseConnection.getProductNameColumn());
-			invoice.setProductName(EmbeddedDatabaseConnection.getProductPriceColumn());
-			invoice.setProductName(EmbeddedDatabaseConnection.getGuaranteeColumn());
-			//invoice.setProductName(EmbeddedDatabaseConnection.getPurchaseDateColumnName());
+			invoice.setProductName(resultSet.getString(EmbeddedDatabaseConnection.getProductNameColumn()));
+			invoice.setProductPrice(resultSet.getInt(EmbeddedDatabaseConnection.getProductPriceColumn()));
+			invoice.setGuaranteePeriod(resultSet.getInt(EmbeddedDatabaseConnection.getGuaranteeColumn()));
+			//invoice.setPurchaseDate(resultSet.getString(EmbeddedDatabaseConnection.getGuaranteeColumn()));
 
 			invoices.add(invoice);
 		}
 
+		return invoices;
+
 	}
+
 
 	private void configureInsertStatement() {
 		try {
