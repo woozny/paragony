@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class InvoiceTest {
 
+	public static final String PURCHASE_DATE = "01.10.1016";
 	private static final String HEADPHONES = "Headphones";
 	private static final String INVOICE_IMAGE_PATH = "/home/tomek/IdeaProjects/paragony/src/test/TestResources/427572.jpg";
 	//private static final String INCORRECT_INVOICE_IMAGE_PATH = "test427572.jpg";
@@ -52,6 +53,13 @@ public class InvoiceTest {
 		assertThat(invoice.getInvoiceImage().getHeight()).isEqualTo(sampleInvoiceImage.getHeight());
 		assertThat(invoice.getInvoiceImage().getWidth()).isEqualTo(sampleInvoiceImage.getWidth());
 		assertThat(invoice.getInvoiceImage().getType()).isEqualTo(sampleInvoiceImage.getType());
+	}
+
+	@Test
+	public void shouldBeAbleToAddPurchaseDate() {
+		invoice.setPurchaseDate(PURCHASE_DATE);
+
+		assertThat(invoice.getPurchaseDateAsString()).isEqualTo(PURCHASE_DATE);
 	}
 
 //TODO: test for exception when image does not exists

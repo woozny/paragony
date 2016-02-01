@@ -21,12 +21,15 @@ public class InvoicesDAO {
 		configureInsertStatement();
 	}
 
-	public static void insertInvoiceToDb(Invoice invoice) throws SQLException {
+	public void insertInvoiceToDb(Invoice invoice) throws SQLException {
 		psInsert.setInt(1, 1);
 		psInsert.setString(2, invoice.getProductName());
 		psInsert.setInt(3, invoice.getProductPrice());
 		psInsert.setInt(4, invoice.getGuaranteePeriod());
+		psInsert.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
 		psInsert.executeUpdate();
+
+		connection.commit();
 
 		System.out.println("New invoice added to DB");
 	}
@@ -47,6 +50,10 @@ public class InvoicesDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private Date convertJavaDateToSqlDate(java.util.Date purchaseDate) {
+		return new Date(purchaseDate.getTime());
 	}
 
 

@@ -11,6 +11,7 @@ public class EmbeddedDatabaseConnection {
 	private static final String TABLE_NAME = "invoices";
 	private static final String PRODUCT_NAME_COLUMN = "product_name";
 	private static final String PRODUCT_PRICE_COLUMN = "product_price";
+	private static final String PURCHASE_DATE = "purchase_date";
 	private static final String GUARANTEE_COLUMN = "guarantee_period";
 	private Connection connection;
 	private Statement statement;
@@ -77,7 +78,7 @@ public class EmbeddedDatabaseConnection {
 
 	private void createTable() throws SQLException {
 		//TODO: Add column for images
-		statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int)");
+		statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int, " + PURCHASE_DATE + " date)");
 		System.out.println("Created table " + TABLE_NAME);
 		connection.commit();
 
