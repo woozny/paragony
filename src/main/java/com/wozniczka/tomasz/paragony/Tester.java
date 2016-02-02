@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class Tester {
+
+	public static final String INVOICE_IMAGE_PATH = "/home/tomek/IdeaProjects/paragony/src/test/TestResources/427572.jpg";
+
 	public static void main(String[] args) {
 		InvoicesDAO dao = new InvoicesDAO(new EmbeddedDatabaseConnection());
 		Invoice i = new Invoice();
@@ -17,14 +20,14 @@ public class Tester {
 		i.setGuaranteePeriod(2);
 		i.setProductPrice(400);
 		i.setPurchaseDate("2015-01-10");
-		i.addInvoiceImage("/home/tomek/IdeaProjects/paragony/src/test/TestResources/427572.jpg");
+		i.addInvoiceImage(INVOICE_IMAGE_PATH);
 		i.setProductName("Sluchawki");
 
 		i2.setProductName("Kebab");
 		i2.setGuaranteePeriod(1);
 		i2.setProductPrice(100);
 		i2.setPurchaseDate("2016-03-10");
-		i2.addInvoiceImage("/home/tomek/IdeaProjects/paragony/src/test/TestResources/427572.jpg");
+		i2.addInvoiceImage(INVOICE_IMAGE_PATH);
 
 
 		try {

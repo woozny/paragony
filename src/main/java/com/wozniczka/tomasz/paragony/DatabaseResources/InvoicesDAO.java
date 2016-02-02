@@ -89,12 +89,14 @@ public class InvoicesDAO {
 
 		statement.execute(
 				"create table " + TABLE_NAME +
-						"(id int, " +
+						"(" +
+						ID_COLUMN + " int, " +
 						PRODUCT_NAME_COLUMN + " varchar(100), " +
 						PRODUCT_PRICE_COLUMN + " int, " +
 						GUARANTEE_COLUMN + " int, " +
 						INVOICE_IMAGE_COLUMN + " BLOB, " +
-						PURCHASE_DATE_COLUMN + " date)"
+						PURCHASE_DATE_COLUMN + " date" +
+						")"
 		);
 		System.out.println("Created table " + TABLE_NAME);
 		connection.commit();
