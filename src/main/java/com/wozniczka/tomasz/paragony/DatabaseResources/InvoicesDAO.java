@@ -90,7 +90,6 @@ public class InvoicesDAO {
 		//TODO: Add column purchase date
 
 		statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int, " + INVOICE_IMAGE_COLUMN + " BLOB)");
-		//statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int, " + PURCHASE_DATE_COLUMN + " date)");
 		System.out.println("Created table " + TABLE_NAME);
 		connection.commit();
 
