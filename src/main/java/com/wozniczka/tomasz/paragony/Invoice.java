@@ -75,16 +75,6 @@ public class Invoice {
 		invoiceImage = image;
 	}
 
-	public void writeInvoiceImageToDisk(String writePath) {
-		File file = new File(writePath + "." + imageFormat);
-		try {
-			ImageIO.write(invoiceImage, imageFormat, file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-
 	public String getImageFormat() {
 		return imageFormat;
 	}

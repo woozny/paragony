@@ -2,6 +2,7 @@ package com.wozniczka.tomasz.paragony;
 
 import com.wozniczka.tomasz.paragony.DatabaseResources.EmbeddedDatabaseConnection;
 import com.wozniczka.tomasz.paragony.DatabaseResources.InvoicesDAO;
+import com.wozniczka.tomasz.paragony.images.ImageHandler;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Tester {
 				System.out.println(inv.getProductName());
 				System.out.println(inv.getProductPrice());
 				System.out.println(inv.getGuaranteePeriod());
-				inv.writeInvoiceImageToDisk("/home/tomek/plik");
+				ImageHandler.writeInvoiceImageToDisk(inv, "/home/tomek/plik");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -86,7 +86,6 @@ public class InvoicesDAO {
 	}
 
 	private void createTable() throws SQLException {
-		//TODO: Add column for images
 		//TODO: Add column purchase date
 
 		statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int, " + INVOICE_IMAGE_COLUMN + " BLOB)");

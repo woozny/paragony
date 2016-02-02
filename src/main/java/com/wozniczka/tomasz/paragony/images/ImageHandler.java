@@ -1,0 +1,24 @@
+package com.wozniczka.tomasz.paragony.images;
+
+import com.wozniczka.tomasz.paragony.Invoice;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+public class ImageHandler {
+
+	public static void writeInvoiceImageToDisk(Invoice invoice, String writePath) {
+		BufferedImage image = invoice.getInvoiceImage();
+		String imageFormat = invoice.getImageFormat();
+
+		File file = new File(writePath + "." + imageFormat);
+		try {
+			ImageIO.write(image, imageFormat, file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+}
