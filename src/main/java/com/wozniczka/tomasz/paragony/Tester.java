@@ -10,13 +10,14 @@ import java.util.List;
 public class Tester {
 
 	public static final String INVOICE_IMAGE_PATH = "/home/tomek/IdeaProjects/paragony/src/test/TestResources/427572.jpg";
+	public static final EmbeddedDatabaseConnection DB_CONNECTION = new EmbeddedDatabaseConnection();
 	private List<Invoice> invoices;
 	private InvoicesDAO dao;
 	private MainWindow mainWindow;
 
 
 	Tester() {
-		dao = new InvoicesDAO(new EmbeddedDatabaseConnection());
+		dao = new InvoicesDAO(DB_CONNECTION);
 		try {
 			invoices = dao.selectAllInvoicesFormDB();
 		} catch (SQLException e) {
@@ -47,6 +48,7 @@ public class Tester {
 		try {
 			tester.dao.insertInvoiceToDb(i);
 			tester.dao.insertInvoiceToDb(i2);
+			DB_CONNECTION.closeConnection();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+///TODO: remove this class!
 public class UserInterface implements ActionListener {
-
 	JFrame frame;
 	JButton button;
 
