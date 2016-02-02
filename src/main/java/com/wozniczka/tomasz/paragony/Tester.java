@@ -2,7 +2,7 @@ package com.wozniczka.tomasz.paragony;
 
 import com.wozniczka.tomasz.paragony.DatabaseResources.EmbeddedDatabaseConnection;
 import com.wozniczka.tomasz.paragony.DatabaseResources.InvoicesDAO;
-import com.wozniczka.tomasz.paragony.images.ImageHandler;
+import com.wozniczka.tomasz.paragony.gui.MainWindow;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -10,9 +10,24 @@ import java.util.List;
 public class Tester {
 
 	public static final String INVOICE_IMAGE_PATH = "/home/tomek/IdeaProjects/paragony/src/test/TestResources/427572.jpg";
+	private List<Invoice> invoices;
+	private InvoicesDAO dao;
+	private MainWindow mainWindow;
+
+
+	Tester() {
+		dao = new InvoicesDAO(new EmbeddedDatabaseConnection());
+		try {
+			invoices = dao.selectAllInvoicesFormDB();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		mainWindow = new MainWindow(invoices);
+
+	}
 
 	public static void main(String[] args) {
-		InvoicesDAO dao = new InvoicesDAO(new EmbeddedDatabaseConnection());
+		Tester tester = new Tester();
 		Invoice i = new Invoice();
 		Invoice i2 = new Invoice();
 
@@ -21,7 +36,6 @@ public class Tester {
 		i.setProductPrice(400);
 		i.setPurchaseDate("2015-01-10");
 		i.addInvoiceImage(INVOICE_IMAGE_PATH);
-		i.setProductName("Sluchawki");
 
 		i2.setProductName("Kebab");
 		i2.setGuaranteePeriod(1);
@@ -31,21 +45,8 @@ public class Tester {
 
 
 		try {
-			dao.insertInvoiceToDb(i);
-			dao.insertInvoiceToDb(i2);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			List<Invoice> invoices = dao.selectAllInvoicesFormDB();
-			for (Invoice inv : invoices) {
-				System.out.println(inv.getProductName());
-				System.out.println(inv.getProductPrice());
-				System.out.println(inv.getGuaranteePeriod());
-				System.out.println(inv.getPurchaseDateAsString());
-				ImageHandler.writeInvoiceImageToDisk(inv, "/home/tomek/");
-			}
+			tester.dao.insertInvoiceToDb(i);
+			tester.dao.insertInvoiceToDb(i2);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
