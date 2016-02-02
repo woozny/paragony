@@ -29,6 +29,7 @@ public class InvoicesDAO {
 	private final Statement statement;
 	private ResultSet resultSet;
 
+	//TODO: Update and Delete statements
 
 	public InvoicesDAO(EmbeddedDatabaseConnection dbConnection) {
 		this.dbConnection = dbConnection;
@@ -59,15 +60,7 @@ public class InvoicesDAO {
 	public List<Invoice> selectAllInvoicesFormDB() throws SQLException {
 		List<Invoice> invoices = new ArrayList<>();
 
-		resultSet = statement.executeQuery(
-				"SELECT " + ID_COLUMN + ", " +
-						PRODUCT_NAME_COLUMN + ", " +
-						PRODUCT_PRICE_COLUMN + ", " +
-						GUARANTEE_COLUMN + ", " +
-						INVOICE_IMAGE_COLUMN + ", " +
-						PURCHASE_DATE_COLUMN +
-						" FROM " + TABLE_NAME + " ORDER BY id"
-		);
+		invokeSelectAllStatement();
 
 		while (resultSet.next()) {
 			Invoice invoice = new Invoice();
@@ -83,6 +76,18 @@ public class InvoicesDAO {
 
 		return invoices;
 
+	}
+
+	private void invokeSelectAllStatement() throws SQLException {
+		resultSet = statement.executeQuery(
+				"SELECT " + ID_COLUMN + ", " +
+						PRODUCT_NAME_COLUMN + ", " +
+						PRODUCT_PRICE_COLUMN + ", " +
+						GUARANTEE_COLUMN + ", " +
+						INVOICE_IMAGE_COLUMN + ", " +
+						PURCHASE_DATE_COLUMN +
+						" FROM " + TABLE_NAME + " ORDER BY id"
+		);
 	}
 
 	private void createTable() throws SQLException {
