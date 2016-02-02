@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Invoice {
-	public static final String DATE_FORMAT = "dd.mm.yyyy";
+	public static final String DATE_FORMAT = "yyyy-mm-dd";
 	private final DateFormat format = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
 	private String productName;
 	private int productPrice;

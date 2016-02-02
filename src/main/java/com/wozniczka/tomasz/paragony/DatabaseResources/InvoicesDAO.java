@@ -24,7 +24,6 @@ public class InvoicesDAO {
 
 	private static PreparedStatement psInsert;
 	private static PreparedStatement psUpdate;
-	private static PreparedStatement psSelectAll;
 	private final EmbeddedDatabaseConnection dbConnection;
 	private final Connection connection;
 	private final Statement statement;
@@ -49,7 +48,7 @@ public class InvoicesDAO {
 		psInsert.setInt(3, invoice.getProductPrice());
 		psInsert.setInt(4, invoice.getGuaranteePeriod());
 		psInsert.setBlob(5, convertImageToBlob(invoice.getInvoiceImage(), invoice.getImageFormat()));
-		//psInsert.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
+		psInsert.setDate(6, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
 		psInsert.executeUpdate();
 
 		connection.commit();
@@ -65,7 +64,8 @@ public class InvoicesDAO {
 						PRODUCT_NAME_COLUMN + ", " +
 						PRODUCT_PRICE_COLUMN + ", " +
 						GUARANTEE_COLUMN + ", " +
-						INVOICE_IMAGE_COLUMN +
+						INVOICE_IMAGE_COLUMN + ", " +
+						PURCHASE_DATE_COLUMN +
 						" FROM " + TABLE_NAME + " ORDER BY id"
 		);
 
@@ -76,7 +76,7 @@ public class InvoicesDAO {
 			invoice.setProductPrice(resultSet.getInt(PRODUCT_PRICE_COLUMN));
 			invoice.setGuaranteePeriod(resultSet.getInt(GUARANTEE_COLUMN));
 			invoice.addInvoiceImage(convertBlobToBufferedImage(resultSet.getBlob(INVOICE_IMAGE_COLUMN)));
-			//invoice.setPurchaseDate(resultSet.getString(PURCHASE_DATE_COLUMN));
+			invoice.setPurchaseDate(resultSet.getDate(PURCHASE_DATE_COLUMN).toString());
 
 			invoices.add(invoice);
 		}
@@ -86,9 +86,16 @@ public class InvoicesDAO {
 	}
 
 	private void createTable() throws SQLException {
-		//TODO: Add column purchase date
 
-		statement.execute("create table " + TABLE_NAME + "(id int, " + PRODUCT_NAME_COLUMN + " varchar(100), " + PRODUCT_PRICE_COLUMN + " int, " + GUARANTEE_COLUMN + " int, " + INVOICE_IMAGE_COLUMN + " BLOB)");
+		statement.execute(
+				"create table " + TABLE_NAME +
+						"(id int, " +
+						PRODUCT_NAME_COLUMN + " varchar(100), " +
+						PRODUCT_PRICE_COLUMN + " int, " +
+						GUARANTEE_COLUMN + " int, " +
+						INVOICE_IMAGE_COLUMN + " BLOB, " +
+						PURCHASE_DATE_COLUMN + " date)"
+		);
 		System.out.println("Created table " + TABLE_NAME);
 		connection.commit();
 
@@ -97,7 +104,7 @@ public class InvoicesDAO {
 
 	private void configureInsertStatement() {
 		try {
-			psInsert = connection.prepareStatement("insert into " + TABLE_NAME + " values (?, ?, ?, ?, ?)");
+			psInsert = connection.prepareStatement("insert into " + TABLE_NAME + " values (?, ?, ?, ?, ?, ?)");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

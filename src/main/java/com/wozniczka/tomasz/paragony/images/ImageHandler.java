@@ -13,12 +13,16 @@ public class ImageHandler {
 		BufferedImage image = invoice.getInvoiceImage();
 		String imageFormat = invoice.getImageFormat();
 
-		File file = new File(writePath + "." + imageFormat);
+		File file = new File(writePath + createImageFileName(invoice));
 		try {
 			ImageIO.write(image, imageFormat, file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	private static String createImageFileName(Invoice i) {
+		return i.getProductName() + "_" + i.getPurchaseDateAsString() + "." + i.getImageFormat();
 	}
 }
