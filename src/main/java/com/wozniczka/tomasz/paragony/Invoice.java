@@ -1,7 +1,5 @@
 package com.wozniczka.tomasz.paragony;
 
-import com.sun.image.codec.jpeg.ImageFormatException;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -95,7 +93,7 @@ public class Invoice {
 		if (imagePath.contains(".")) {
 			imageFormat = imagePath.substring(imagePath.lastIndexOf('.') + 1);
 		} else {
-			throw new ImageFormatException("Unable to find file extension");
+			throw new IllegalArgumentException("Unable to find file extension in: " + imagePath);
 		}
 	}
 
