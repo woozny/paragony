@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class InvoiceTest {
 
-	public static final String PURCHASE_DATE = "01.10.1016";
+	public static final String PURCHASE_DATE = "1016-10-01";
 	private static final String HEADPHONES = "Headphones";
 	private static final String INVOICE_IMAGE_PATH = "src/test/TestResources/427572.jpg";
 	//private static final String INCORRECT_INVOICE_IMAGE_PATH = "test427572.jpg";
