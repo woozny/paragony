@@ -50,6 +50,7 @@ public class InvoicesDAO {
 		psInsert.setInt(3, invoice.getGuaranteePeriod());
 		psInsert.setBlob(4, convertImageToBlob(invoice.getInvoiceImage(), invoice.getImageFormat()));
 		psInsert.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
+
 		psInsert.executeUpdate();
 
 		connection.commit();
@@ -141,7 +142,7 @@ public class InvoicesDAO {
 
 	private void configureUpdateStatement() {
 		try {
-			psInsert = connection.prepareStatement("UPDATE " + TABLE_NAME + " SET " +
+			psUpdate = connection.prepareStatement("UPDATE " + TABLE_NAME + " SET " +
 							PRODUCT_NAME_COLUMN + "=?, " +
 							PRODUCT_PRICE_COLUMN + "=?, " +
 							GUARANTEE_COLUMN + "=?, " +

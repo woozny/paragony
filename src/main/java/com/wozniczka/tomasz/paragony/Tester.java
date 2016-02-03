@@ -21,7 +21,6 @@ public class Tester {
 		i.setProductPrice(400);
 		i.setPurchaseDate("2015-01-10");
 		i.addInvoiceImage(INVOICE_IMAGE_PATH);
-		i.setProductName("Sluchawki");
 
 		i2.setProductName("Kebab");
 		i2.setGuaranteePeriod(1);
