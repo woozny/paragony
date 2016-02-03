@@ -41,20 +41,35 @@ public class InvoicesDAO {
 			e.printStackTrace();
 		}
 		configureInsertStatement();
+		configureUpdateStatement();
 	}
 
 	public void insertInvoiceToDb(Invoice invoice) throws SQLException {
-		psInsert.setInt(1, 1);
-		psInsert.setString(2, invoice.getProductName());
-		psInsert.setInt(3, invoice.getProductPrice());
-		psInsert.setInt(4, invoice.getGuaranteePeriod());
-		psInsert.setBlob(5, convertImageToBlob(invoice.getInvoiceImage(), invoice.getImageFormat()));
-		psInsert.setDate(6, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
+		psInsert.setString(1, invoice.getProductName());
+		psInsert.setInt(2, invoice.getProductPrice());
+		psInsert.setInt(3, invoice.getGuaranteePeriod());
+		psInsert.setBlob(4, convertImageToBlob(invoice.getInvoiceImage(), invoice.getImageFormat()));
+		psInsert.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
 		psInsert.executeUpdate();
 
 		connection.commit();
 
 		System.out.println("New invoice added to DB");
+	}
+
+	public void updateInvoiceInDb(Invoice invoice) throws SQLException {
+		psUpdate.setString(1, invoice.getProductName());
+		psUpdate.setInt(2, invoice.getProductPrice());
+		psUpdate.setInt(3, invoice.getGuaranteePeriod());
+		psUpdate.setBlob(4, convertImageToBlob(invoice.getInvoiceImage(), invoice.getImageFormat()));
+		psUpdate.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
+		psUpdate.setInt(6, invoice.getId());
+
+		psUpdate.executeUpdate();
+
+		connection.commit();
+
+		System.out.println("Invoice has been updated");
 	}
 
 	public List<Invoice> selectAllInvoicesFormDB() throws SQLException {
@@ -65,6 +80,7 @@ public class InvoicesDAO {
 		while (resultSet.next()) {
 			Invoice invoice = new Invoice();
 
+			invoice.setId(resultSet.getInt(ID_COLUMN));
 			invoice.setProductName(resultSet.getString(PRODUCT_NAME_COLUMN));
 			invoice.setProductPrice(resultSet.getInt(PRODUCT_PRICE_COLUMN));
 			invoice.setGuaranteePeriod(resultSet.getInt(GUARANTEE_COLUMN));
@@ -95,13 +111,12 @@ public class InvoicesDAO {
 		statement.execute(
 				"create table " + TABLE_NAME +
 						"(" +
-						ID_COLUMN + " int, " +
+						ID_COLUMN + " int NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
 						PRODUCT_NAME_COLUMN + " varchar(100), " +
 						PRODUCT_PRICE_COLUMN + " int, " +
 						GUARANTEE_COLUMN + " int, " +
 						INVOICE_IMAGE_COLUMN + " BLOB, " +
-						PURCHASE_DATE_COLUMN + " date" +
-						")"
+						PURCHASE_DATE_COLUMN + " date)"
 		);
 		System.out.println("Created table " + TABLE_NAME);
 		connection.commit();
@@ -111,7 +126,29 @@ public class InvoicesDAO {
 
 	private void configureInsertStatement() {
 		try {
-			psInsert = connection.prepareStatement("insert into " + TABLE_NAME + " values (?, ?, ?, ?, ?, ?)");
+			psInsert = connection.prepareStatement("insert into " + TABLE_NAME + " (" +
+							PRODUCT_NAME_COLUMN + ", " +
+							PRODUCT_PRICE_COLUMN + ", " +
+							GUARANTEE_COLUMN + ", " +
+							INVOICE_IMAGE_COLUMN + ", " +
+							PURCHASE_DATE_COLUMN +
+							") VALUES (?, ?, ?, ?, ?)"
+			);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void configureUpdateStatement() {
+		try {
+			psInsert = connection.prepareStatement("UPDATE " + TABLE_NAME + " SET " +
+							PRODUCT_NAME_COLUMN + "=?, " +
+							PRODUCT_PRICE_COLUMN + "=?, " +
+							GUARANTEE_COLUMN + "=?, " +
+							INVOICE_IMAGE_COLUMN + "=?, " +
+							PURCHASE_DATE_COLUMN + "=?" +
+							"WHERE " + ID_COLUMN + "=?"
+			);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
