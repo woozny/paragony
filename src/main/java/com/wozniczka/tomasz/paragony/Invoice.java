@@ -26,7 +26,7 @@ public class Invoice {
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		if (this.id == 0) this.id = id;
 	}
 
 	public String getProductName() {

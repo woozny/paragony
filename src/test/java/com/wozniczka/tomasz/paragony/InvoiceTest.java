@@ -62,6 +62,14 @@ public class InvoiceTest {
 		assertThat(invoice.getPurchaseDateAsString()).isEqualTo(PURCHASE_DATE);
 	}
 
+	@Test
+	public void shouldNotUpdateIdWhenIsDifferentThanZero() {
+		invoice.setId(10);
+		invoice.setId(15);
+
+		assertThat(invoice.getId()).isEqualTo(10);
+	}
+
 //TODO: test for exception when image does not exists
 
 	private BufferedImage loadInvoiceImage(String imagePath) {
