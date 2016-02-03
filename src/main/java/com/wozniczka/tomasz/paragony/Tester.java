@@ -9,12 +9,14 @@ import java.util.List;
 
 public class Tester {
 
-	public static final String INVOICE_IMAGE_PATH = "/home/tomek/IdeaProjects/paragony/src/test/TestResources/427572.jpg";
+	public static final String INVOICE_IMAGE_PATH = "src/test/TestResources/427572.jpg";
 
 	public static void main(String[] args) {
 		InvoicesDAO dao = new InvoicesDAO(new EmbeddedDatabaseConnection());
 		Invoice i = new Invoice();
 		Invoice i2 = new Invoice();
+
+		List<Invoice> invoices;
 
 		i.setProductName("Sluchawki");
 		i.setGuaranteePeriod(2);
@@ -37,13 +39,31 @@ public class Tester {
 		}
 
 		try {
-			List<Invoice> invoices = dao.selectAllInvoicesFormDB();
+			invoices = dao.selectAllInvoicesFormDB();
 			for (Invoice inv : invoices) {
 				System.out.println(inv.getProductName());
 				System.out.println(inv.getProductPrice());
 				System.out.println(inv.getGuaranteePeriod());
 				System.out.println(inv.getPurchaseDateAsString());
 				ImageHandler.writeInvoiceImageToDisk(inv, "/home/tomek/");
+
+			}
+			System.out.println("------------------------");
+			System.out.println("Updateing");
+			System.out.println("------------------------");
+			//change something
+			invoices.get(1).setProductName("Taczki");
+
+			//update in db
+			dao.updateInvoiceInDb(invoices.get(1));
+			// reload objects
+			invoices = dao.selectAllInvoicesFormDB();
+
+			for (Invoice inv1 : invoices) {
+				System.out.println(inv1.getProductName());
+				System.out.println(inv1.getProductPrice());
+				System.out.println(inv1.getGuaranteePeriod());
+				System.out.println(inv1.getPurchaseDateAsString());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
