@@ -6,11 +6,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
+
 public class MainWindow {
 
-	JFrame frame;
-	JList list;
-	List<Invoice> allInvoices;
+	private static final String[] columnNames = {"Product name", "Price", "Purchase date", "Guarantee period"};
+	private static final String CURRENCY = "PLN";
+	private JFrame frame;
+	private List<Invoice> allInvoices;
+
 
 	public MainWindow(List<Invoice> invoices) {
 		allInvoices = invoices;
@@ -29,21 +33,23 @@ public class MainWindow {
 	}
 
 	private void prepareTable(List<Invoice> invoices) {
-		DefaultListModel invoicesList = new DefaultListModel();
+		Object[][] data = new Object[invoices.size()][columnNames.length];
 
-		for (Invoice i : invoices) {
-			invoicesList.addElement(i);
+		for (int i = 0; i < invoices.size(); i++) {
+			data[i][0] = invoices.get(i).getProductName();
+			data[i][1] = invoices.get(i).getProductPrice() + " " + CURRENCY;
+			data[i][2] = invoices.get(i).getPurchaseDateAsString();
+			data[i][3] = invoices.get(i).getGuaranteePeriod();
 		}
 
-		list = new JList(invoicesList);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setSelectedIndex(0);
+		JTable table = new JTable(data, columnNames);
 
-		JScrollPane listScrollPane = new JScrollPane(list);
+		JScrollPane scrollPane = new JScrollPane(table);
+		table.setFillsViewportHeight(true);
+		table.setSelectionMode(SINGLE_SELECTION);
 
-		frame.getContentPane().add(listScrollPane, BorderLayout.CENTER);
-
-
+		frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
 	}
+
 
 }
