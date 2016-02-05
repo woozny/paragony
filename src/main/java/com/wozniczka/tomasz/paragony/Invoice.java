@@ -105,4 +105,9 @@ public class Invoice {
 		}
 		return img;
 	}
+
+	public String toString() {
+		String rok = (guaranteePeriod > 1) ? "lata" : "rok";
+		return productName + ", cena:" + productPrice + ", data zakupu: " + getPurchaseDateAsString() + ", okres gwarancji: " + guaranteePeriod + ": " + rok;
+	}
 }
