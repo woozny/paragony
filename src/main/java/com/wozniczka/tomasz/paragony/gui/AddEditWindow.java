@@ -39,6 +39,7 @@ public class AddEditWindow {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(400, 200);
 		frame.setTitle("Add new invoice");
+		frame.setResizable(false);
 
 		//set layouts
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
