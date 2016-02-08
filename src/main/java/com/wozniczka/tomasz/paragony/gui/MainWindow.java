@@ -1,5 +1,6 @@
 package com.wozniczka.tomasz.paragony.gui;
 
+import com.wozniczka.tomasz.paragony.DatabaseResources.InvoicesDAO;
 import com.wozniczka.tomasz.paragony.Invoice;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class MainWindow {
 
 	private static final String[] columnNames = {"Product name", "Price", "Purchase date", "Guarantee period"};
 	private static final String CURRENCY = "PLN";
+	private final InvoicesDAO dao;
 	private List<Invoice> allInvoices;
 	private JFrame frame;
 	private JTable table;
@@ -22,8 +24,9 @@ public class MainWindow {
 	private JButton deleteButton;
 
 
-	public MainWindow(List<Invoice> invoices) {
+	public MainWindow(List<Invoice> invoices, InvoicesDAO dao) {
 		allInvoices = invoices;
+		this.dao = dao;
 		prepareMainWindow();
 	}
 
@@ -77,7 +80,7 @@ public class MainWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new AddEditWindow(new Invoice());
+			new AddEditWindow(dao, new Invoice());
 		}
 	}
 
