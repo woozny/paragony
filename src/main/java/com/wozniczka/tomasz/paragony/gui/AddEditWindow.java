@@ -20,17 +20,10 @@ public class AddEditWindow {
 	private JPanel guaranteeRow;
 	private JPanel fileChooserRow;
 	private JPanel buttonsRow;
-	private JLabel nameLabel;
-	private JLabel priceLabel;
-	private JLabel purchaseLabel;
-	private JLabel guaranteeLabel;
-	private JLabel fileChooserLabel;
 	private JTextField nameTextField;
 	private JTextField priceTextField;
 	private JTextField purchaseTextField;
 	private JTextField guaranteeTextField;
-	private JButton addButton;
-	private JButton cancelButton;
 	private JButton fileChooserButton;
 	private JFileChooser fileChooser;
 	private String invoiceImagePath;
@@ -78,11 +71,11 @@ public class AddEditWindow {
 
 	private void prepareFields() {
 		//set fields properties
-		nameLabel = new JLabel("Product name: ");
-		priceLabel = new JLabel("Product price: ");
-		purchaseLabel = new JLabel("Purchase date: ");
-		guaranteeLabel = new JLabel("Guarantee period: ");
-		fileChooserLabel = new JLabel("Choose invoice image: ");
+		JLabel nameLabel = new JLabel("Product name: ");
+		JLabel priceLabel = new JLabel("Product price: ");
+		JLabel purchaseLabel = new JLabel("Purchase date: ");
+		JLabel guaranteeLabel = new JLabel("Guarantee period: ");
+		JLabel fileChooserLabel = new JLabel("Choose invoice image: ");
 		nameTextField = new JTextField(TEXT_FIELD_SIZE);
 		priceTextField = new JTextField(TEXT_FIELD_SIZE);
 		purchaseTextField = new JTextField(TEXT_FIELD_SIZE);
@@ -110,8 +103,8 @@ public class AddEditWindow {
 	}
 
 	private void prepareButtons() {
-		addButton = new JButton("Add");
-		cancelButton = new JButton("Cancel");
+		JButton addButton = new JButton("Add");
+		JButton cancelButton = new JButton("Cancel");
 
 		buttonsRow.add(addButton, BorderLayout.WEST);
 		buttonsRow.add(cancelButton, BorderLayout.EAST);
