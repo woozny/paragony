@@ -16,7 +16,7 @@ public class IntegrationTests {
 	//TODO: clean this mess
 	//TODO: split this huge test
 	@Test
-	public static void shouldIfDbIsWorkingAsExpected() {
+	public void shouldIfDbIsWorkingAsExpected() {
 		IntegrationTests t = new IntegrationTests();
 		InvoicesDAO dao = new InvoicesDAO(new EmbeddedDatabaseConnection());
 		Invoice i = new Invoice();
@@ -50,7 +50,8 @@ public class IntegrationTests {
 				System.out.println(inv.getProductPrice());
 				System.out.println(inv.getGuaranteePeriod());
 				System.out.println(inv.getPurchaseDateAsString());
-				ImageHandler.writeInvoiceImageToDisk(inv, "/home/tomek/");
+				//TODO this should be cleaned automatically
+				ImageHandler.writeInvoiceImageToDisk(inv, "src/test/");
 
 			}
 			System.out.println("------------------------");
