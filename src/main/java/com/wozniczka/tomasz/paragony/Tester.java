@@ -71,7 +71,7 @@ public class Tester {
 			e.printStackTrace();
 		}
 		//Display GUI
-		MainWindow mainWindow = new MainWindow(t.invoices, dao);
+		new MainWindow(dao);
 
 	}
 }

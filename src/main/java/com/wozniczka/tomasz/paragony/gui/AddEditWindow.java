@@ -12,6 +12,7 @@ import java.sql.SQLException;
 public class AddEditWindow {
 	public static final int TEXT_FIELD_SIZE = 20;
 	private final InvoicesDAO dao;
+	private final MainWindow mainWindow;
 	private Invoice invoice;
 	private JFrame frame;
 	private JPanel nameRow;
@@ -28,7 +29,8 @@ public class AddEditWindow {
 	private JFileChooser fileChooser;
 	private String invoiceImagePath;
 
-	public AddEditWindow(InvoicesDAO dao, Invoice invoice) {
+	public AddEditWindow(MainWindow mainWindow, InvoicesDAO dao, Invoice invoice) {
+		this.mainWindow = mainWindow;
 		this.invoice = invoice;
 		this.dao = dao;
 		prepareAddEditWindow();
@@ -147,6 +149,7 @@ public class AddEditWindow {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+			mainWindow.refreshData();
 			frame.dispose();
 		}
 	}

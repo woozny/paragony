@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.List;
 
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
@@ -22,12 +23,32 @@ public class MainWindow {
 	private JButton addButton;
 	private JButton editButton;
 	private JButton deleteButton;
+	private MainWindow mainWindow;
 
 
-	public MainWindow(List<Invoice> invoices, InvoicesDAO dao) {
-		allInvoices = invoices;
+	public MainWindow(InvoicesDAO dao) {
 		this.dao = dao;
+		try {
+			getAllInvoicesFromDb(dao);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		prepareMainWindow();
+		mainWindow = this;
+	}
+
+	public void refreshData() {
+		try {
+			getAllInvoicesFromDb(dao);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		prepareTable(allInvoices);
+		frame.revalidate();
+	}
+
+	private void getAllInvoicesFromDb(InvoicesDAO dao) throws SQLException {
+		allInvoices = dao.selectAllInvoicesFormDB();
 	}
 
 	private void prepareMainWindow() {
@@ -80,7 +101,7 @@ public class MainWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new AddEditWindow(dao, new Invoice());
+			new AddEditWindow(mainWindow, dao, new Invoice());
 		}
 	}
 
