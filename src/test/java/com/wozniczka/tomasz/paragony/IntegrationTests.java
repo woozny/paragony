@@ -2,19 +2,22 @@ package com.wozniczka.tomasz.paragony;
 
 import com.wozniczka.tomasz.paragony.DatabaseResources.EmbeddedDatabaseConnection;
 import com.wozniczka.tomasz.paragony.DatabaseResources.InvoicesDAO;
-import com.wozniczka.tomasz.paragony.gui.MainWindow;
 import com.wozniczka.tomasz.paragony.images.ImageHandler;
+import org.junit.Test;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class Tester {
+public class IntegrationTests {
 
 	private static final String INVOICE_IMAGE_PATH = "src/test/TestResources/427572.jpg";
 	private List<Invoice> invoices;
 
-	public static void main(String[] args) {
-		Tester t = new Tester();
+	//TODO: clean this mess
+	//TODO: split this huge test
+	@Test
+	public static void shouldIfDbIsWorkingAsExpected() {
+		IntegrationTests t = new IntegrationTests();
 		InvoicesDAO dao = new InvoicesDAO(new EmbeddedDatabaseConnection());
 		Invoice i = new Invoice();
 		Invoice i2 = new Invoice();
@@ -70,8 +73,6 @@ public class Tester {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		//Display GUI
-		new MainWindow(dao);
 
 	}
 }
