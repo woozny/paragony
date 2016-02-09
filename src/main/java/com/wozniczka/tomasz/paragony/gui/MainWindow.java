@@ -20,9 +20,13 @@ public class MainWindow {
 	private List<Invoice> allInvoices;
 	private JFrame frame;
 	private JTable table;
+	private JPanel buttonsRow;
 	private JButton addButton;
 	private JButton editButton;
 	private JButton deleteButton;
+	private JButton downloadButton;
+	private JButton printButton;
+
 	private MainWindow mainWindow;
 
 
@@ -56,6 +60,7 @@ public class MainWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(600, 300);
 		frame.setTitle("Invoice Manager");
+		buttonsRow = new JPanel();
 
 		prepareTable(allInvoices);
 		prepareButtons();
@@ -83,6 +88,8 @@ public class MainWindow {
 	}
 
 	private void prepareButtons() {
+		frame.getContentPane().add(buttonsRow, BorderLayout.SOUTH);
+
 		addButton = new JButton("Add");
 		addButton.addActionListener(new AddButton());
 
@@ -92,9 +99,17 @@ public class MainWindow {
 		deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(new DeleteButton());
 
-		frame.getContentPane().add(addButton, BorderLayout.SOUTH);
-		//frame.getContentPane().add(editButton, BorderLayout.SOUTH);
-		//frame.getContentPane().add(deleteButton, BorderLayout.SOUTH);
+		downloadButton = new JButton("Download");
+
+		deleteButton = new JButton("Delete");
+
+		printButton = new JButton("Print");
+
+		buttonsRow.add(addButton);
+		buttonsRow.add(editButton);
+		buttonsRow.add(deleteButton);
+		buttonsRow.add(downloadButton);
+		buttonsRow.add(printButton);
 	}
 
 	private class AddButton implements ActionListener {

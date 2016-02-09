@@ -15,6 +15,7 @@ public class IntegrationTests {
 
 	//TODO: clean this mess
 	//TODO: split this huge test
+	//TODO: add assertions
 	@Test
 	public void shouldIfDbIsWorkingAsExpected() {
 		IntegrationTests t = new IntegrationTests();
