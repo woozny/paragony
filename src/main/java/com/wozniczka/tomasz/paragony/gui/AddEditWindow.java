@@ -107,6 +107,9 @@ public class AddEditWindow {
 		fileChooser = new JFileChooser();
 		fileChooserButton = new JButton("...");
 
+		//add input verifiers
+		guaranteeTextField.setInputVerifier(new GuaranteeVerifier());
+
 		//add fields to window
 		nameRow.add(nameLabel, BorderLayout.WEST);
 		nameRow.add(nameTextField, BorderLayout.EAST);
@@ -203,5 +206,22 @@ public class AddEditWindow {
 		}
 	}
 
+	private class GuaranteeVerifier extends InputVerifier {
+
+		@Override
+		public boolean verify(JComponent input) {
+			String text = ((JTextField) input).getText();
+			try {
+				Integer.parseInt(text);
+			} catch (NumberFormatException e) {
+				guaranteeTextField.setBackground(Color.red);
+				addButton.setEnabled(false);
+				return false;
+			}
+			guaranteeTextField.setBackground(Color.white);
+			addButton.setEnabled(true);
+			return true;
+		}
+	}
 
 }
