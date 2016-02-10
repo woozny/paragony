@@ -2,6 +2,7 @@ package com.wozniczka.tomasz.paragony.gui;
 
 import com.wozniczka.tomasz.paragony.DatabaseResources.InvoicesDAO;
 import com.wozniczka.tomasz.paragony.Invoice;
+import com.wozniczka.tomasz.paragony.images.ImageHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,6 +105,7 @@ public class MainWindow {
 		deleteButton.addActionListener(new DeleteButton());
 
 		downloadButton = new JButton("Download");
+		downloadButton.addActionListener(new DownloadButton());
 
 		deleteButton = new JButton("Delete");
 
@@ -141,6 +143,23 @@ public class MainWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+		}
+	}
+
+	private class DownloadButton implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String writePath;
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int returnVal = fileChooser.showSaveDialog(frame);
+
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				writePath = fileChooser.getSelectedFile().toString();
+				ImageHandler.writeInvoiceImageToDisk(selectInvoiceForEditing(), writePath);
+			}
 
 		}
 	}

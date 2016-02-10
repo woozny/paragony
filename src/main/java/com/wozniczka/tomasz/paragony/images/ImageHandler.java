@@ -13,7 +13,7 @@ public class ImageHandler {
 		BufferedImage image = invoice.getInvoiceImage();
 		String imageFormat = invoice.getImageFormat();
 
-		File file = new File(writePath + createImageFileName(invoice));
+		File file = new File(writePath + File.separator + createImageFileName(invoice));
 		try {
 			ImageIO.write(image, imageFormat, file);
 		} catch (IOException e) {
