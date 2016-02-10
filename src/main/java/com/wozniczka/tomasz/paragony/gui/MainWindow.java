@@ -28,6 +28,7 @@ public class MainWindow {
 	private JButton printButton;
 
 	private MainWindow mainWindow;
+	private JScrollPane scrollPane;
 
 
 	public MainWindow(InvoicesDAO dao) {
@@ -80,7 +81,10 @@ public class MainWindow {
 
 		table = new JTable(data, columnNames);
 
-		JScrollPane scrollPane = new JScrollPane(table);
+		if (scrollPane != null) {
+			frame.getContentPane().remove(scrollPane);
+		}
+		scrollPane = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(SINGLE_SELECTION);
 
