@@ -81,6 +81,9 @@ public class MainWindow {
 
 		table = new JTable(data, columnNames);
 
+		if (scrollPane != null) {
+			frame.getContentPane().remove(scrollPane);
+		}
 		scrollPane = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(SINGLE_SELECTION);
