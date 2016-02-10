@@ -116,11 +116,16 @@ public class MainWindow {
 		buttonsRow.add(printButton);
 	}
 
+	private Invoice selectInvoiceForEditing() {
+		//TODO: Display popup window when nothing is selected
+		return allInvoices.get(table.getSelectedRow());
+	}
+
 	private class AddButton implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new AddEditWindow(mainWindow, dao, new Invoice());
+			new AddEditWindow(mainWindow, dao);
 		}
 	}
 
@@ -128,7 +133,7 @@ public class MainWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			new AddEditWindow(mainWindow, dao, selectInvoiceForEditing());
 		}
 	}
 

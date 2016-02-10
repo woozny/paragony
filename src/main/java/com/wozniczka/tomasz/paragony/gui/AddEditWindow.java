@@ -26,17 +26,39 @@ public class AddEditWindow {
 	private JTextField purchaseTextField;
 	private JTextField guaranteeTextField;
 	private JButton fileChooserButton;
+	private JButton addButton;
 	private JFileChooser fileChooser;
 	private String invoiceImagePath;
+	private ActionListener addInvoiceActionListener;
+	private ActionListener editInvoiceActionListener;
 
-	public AddEditWindow(MainWindow mainWindow, InvoicesDAO dao, Invoice invoice) {
+	public AddEditWindow(MainWindow mainWindow, InvoicesDAO dao) {
 		this.mainWindow = mainWindow;
-		this.invoice = invoice;
 		this.dao = dao;
+		addInvoiceActionListener = new InvoiceCreator();
 		prepareAddEditWindow();
 		prepareFields();
 		prepareButtons();
 		frame.setVisible(true);
+	}
+
+	public AddEditWindow(MainWindow mainWindow, InvoicesDAO dao, Invoice invoice) {
+		this(mainWindow, dao);
+		this.invoice = invoice;
+		editInvoiceActionListener = new InvoiceUpdater();
+		loadDataFormInvoice();
+		addButton.removeActionListener(addInvoiceActionListener);
+		addButton.addActionListener(editInvoiceActionListener);
+	}
+
+	private void loadDataFormInvoice() {
+		nameTextField.setText(invoice.getProductName());
+		priceTextField.setText(Integer.toString(invoice.getProductPrice()));
+		purchaseTextField.setText(invoice.getPurchaseDateAsString());
+		guaranteeTextField.setText(Integer.toString(invoice.getGuaranteePeriod()));
+		fileChooserButton.setText("Choose new file");
+		addButton.setText("Save changes");
+
 	}
 
 	private void prepareAddEditWindow() {
@@ -105,13 +127,13 @@ public class AddEditWindow {
 	}
 
 	private void prepareButtons() {
-		JButton addButton = new JButton("Add");
+		addButton = new JButton("Add");
 		JButton cancelButton = new JButton("Cancel");
 
 		buttonsRow.add(addButton, BorderLayout.WEST);
 		buttonsRow.add(cancelButton, BorderLayout.EAST);
 
-		addButton.addActionListener(new InvoiceCreator());
+		addButton.addActionListener(addInvoiceActionListener);
 		cancelButton.addActionListener(new FrameCloser());
 	}
 
@@ -158,6 +180,25 @@ public class AddEditWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			frame.dispose();
+		}
+	}
+
+	private class InvoiceUpdater implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			invoice.setProductName(nameTextField.getText());
+			invoice.setProductPrice(Integer.parseInt(priceTextField.getText()));
+			invoice.setPurchaseDate(purchaseTextField.getText());
+			invoice.setGuaranteePeriod(Integer.parseInt(guaranteeTextField.getText()));
+			if (invoiceImagePath != null) invoice.addInvoiceImage(invoiceImagePath);
+			try {
+				dao.updateInvoiceInDb(invoice);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			mainWindow.refreshData();
 			frame.dispose();
 		}
 	}
