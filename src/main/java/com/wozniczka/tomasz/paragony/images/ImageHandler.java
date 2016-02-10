@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ImageHandler {
-
+	//TODO: add support for other formats than JPG
 	public static void writeInvoiceImageToDisk(Invoice invoice, String writePath) {
 		BufferedImage image = invoice.getInvoiceImage();
 		String imageFormat = invoice.getImageFormat();

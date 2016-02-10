@@ -24,7 +24,7 @@ public class InvoicesDAO {
 
 	private static PreparedStatement psInsert;
 	private static PreparedStatement psUpdate;
-	private final EmbeddedDatabaseConnection dbConnection;
+	public final EmbeddedDatabaseConnection dbConnection;
 	private final Connection connection;
 	private final Statement statement;
 	private ResultSet resultSet;
