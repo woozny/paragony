@@ -53,7 +53,7 @@ public class AddEditWindow {
 
 	private void loadDataFormInvoice() {
 		nameTextField.setText(invoice.getProductName());
-		priceTextField.setText(Integer.toString(invoice.getProductPrice()));
+		priceTextField.setText(Double.toString(invoice.getProductPrice()));
 		purchaseTextField.setText(invoice.getPurchaseDateAsString());
 		guaranteeTextField.setText(Integer.toString(invoice.getGuaranteePeriod()));
 		fileChooserButton.setText("Choose new file");
@@ -166,7 +166,7 @@ public class AddEditWindow {
 			Invoice newInvoice = new Invoice();
 			newInvoice.setProductName(nameTextField.getText());
 			newInvoice.setPurchaseDate(purchaseTextField.getText());
-			newInvoice.setProductPrice(Integer.parseInt(priceTextField.getText()));
+			newInvoice.setProductPrice(Double.parseDouble(priceTextField.getText()));
 			newInvoice.setGuaranteePeriod(Integer.parseInt(guaranteeTextField.getText()));
 			newInvoice.addInvoiceImage(invoiceImagePath);
 			try {
@@ -192,7 +192,7 @@ public class AddEditWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			invoice.setProductName(nameTextField.getText());
-			invoice.setProductPrice(Integer.parseInt(priceTextField.getText()));
+			invoice.setProductPrice(Double.parseDouble(priceTextField.getText()));
 			invoice.setPurchaseDate(purchaseTextField.getText());
 			invoice.setGuaranteePeriod(Integer.parseInt(guaranteeTextField.getText()));
 			if (invoiceImagePath != null) invoice.addInvoiceImage(invoiceImagePath);

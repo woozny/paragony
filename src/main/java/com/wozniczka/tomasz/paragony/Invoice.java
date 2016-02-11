@@ -15,7 +15,7 @@ public class Invoice {
 	private final DateFormat format = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
 	private int id;
 	private String productName;
-	private int productPrice;
+	private double productPrice;
 	private int guaranteePeriod;
 	private Date purchaseDate;
 	private BufferedImage invoiceImage;
@@ -37,11 +37,11 @@ public class Invoice {
 		productName = name;
 	}
 
-	public int getProductPrice() {
+	public double getProductPrice() {
 		return productPrice;
 	}
 
-	public void setProductPrice(int productPrice) {
+	public void setProductPrice(double productPrice) {
 		this.productPrice = productPrice;
 	}
 
