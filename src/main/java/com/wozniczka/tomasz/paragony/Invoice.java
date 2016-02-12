@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,7 @@ public class Invoice {
 	private final DateFormat format = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
 	private int id;
 	private String productName;
-	private double productPrice;
+	private BigDecimal productPrice;
 	private int guaranteePeriod;
 	private Date purchaseDate;
 	private BufferedImage invoiceImage;
@@ -37,11 +38,11 @@ public class Invoice {
 		productName = name;
 	}
 
-	public double getProductPrice() {
+	public BigDecimal getProductPrice() {
 		return productPrice;
 	}
 
-	public void setProductPrice(double productPrice) {
+	public void setProductPrice(BigDecimal productPrice) {
 		this.productPrice = productPrice;
 	}
 

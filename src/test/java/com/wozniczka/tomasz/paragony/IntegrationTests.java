@@ -5,12 +5,14 @@ import com.wozniczka.tomasz.paragony.DatabaseResources.InvoicesDAO;
 import com.wozniczka.tomasz.paragony.images.ImageHandler;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
 public class IntegrationTests {
 
 	private static final String INVOICE_IMAGE_PATH = "src/test/TestResources/427572.jpg";
+	private static final BigDecimal PRICE = new BigDecimal("145.61");
 	private List<Invoice> invoices;
 
 	//TODO: clean this mess
@@ -26,13 +28,13 @@ public class IntegrationTests {
 
 		i.setProductName("Sluchawki");
 		i.setGuaranteePeriod(2);
-		i.setProductPrice(400);
+		i.setProductPrice(PRICE);
 		i.setPurchaseDate("2015-01-10");
 		i.addInvoiceImage(INVOICE_IMAGE_PATH);
 
 		i2.setProductName("Kebab");
 		i2.setGuaranteePeriod(1);
-		i2.setProductPrice(100);
+		i2.setProductPrice(PRICE);
 		i2.setPurchaseDate("2016-03-10");
 		i2.addInvoiceImage(INVOICE_IMAGE_PATH);
 

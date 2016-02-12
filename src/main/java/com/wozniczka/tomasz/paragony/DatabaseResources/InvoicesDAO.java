@@ -46,7 +46,7 @@ public class InvoicesDAO {
 
 	public void insertInvoiceToDb(Invoice invoice) throws SQLException {
 		psInsert.setString(1, invoice.getProductName());
-		psInsert.setDouble(2, invoice.getProductPrice());
+		psInsert.setBigDecimal(2, invoice.getProductPrice());
 		psInsert.setInt(3, invoice.getGuaranteePeriod());
 		psInsert.setBlob(4, convertImageToBlob(invoice.getInvoiceImage(), invoice.getImageFormat()));
 		psInsert.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
@@ -60,7 +60,7 @@ public class InvoicesDAO {
 
 	public void updateInvoiceInDb(Invoice invoice) throws SQLException {
 		psUpdate.setString(1, invoice.getProductName());
-		psUpdate.setDouble(2, invoice.getProductPrice());
+		psUpdate.setBigDecimal(2, invoice.getProductPrice());
 		psUpdate.setInt(3, invoice.getGuaranteePeriod());
 		psUpdate.setBlob(4, convertImageToBlob(invoice.getInvoiceImage(), invoice.getImageFormat()));
 		psUpdate.setDate(5, convertJavaDateToSqlDate(invoice.getPurchaseDate()));
@@ -83,7 +83,7 @@ public class InvoicesDAO {
 
 			invoice.setId(resultSet.getInt(ID_COLUMN));
 			invoice.setProductName(resultSet.getString(PRODUCT_NAME_COLUMN));
-			invoice.setProductPrice(resultSet.getDouble(PRODUCT_PRICE_COLUMN));
+			invoice.setProductPrice(resultSet.getBigDecimal(PRODUCT_PRICE_COLUMN));
 			invoice.setGuaranteePeriod(resultSet.getInt(GUARANTEE_COLUMN));
 			invoice.addInvoiceImage(convertBlobToBufferedImage(resultSet.getBlob(INVOICE_IMAGE_COLUMN)));
 			invoice.setPurchaseDate(resultSet.getDate(PURCHASE_DATE_COLUMN).toString());
@@ -114,7 +114,7 @@ public class InvoicesDAO {
 						"(" +
 						ID_COLUMN + " int NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
 						PRODUCT_NAME_COLUMN + " varchar(100), " +
-						PRODUCT_PRICE_COLUMN + " DOUBLE, " +
+						PRODUCT_PRICE_COLUMN + " DECIMAL(10,2), " +
 						GUARANTEE_COLUMN + " int, " +
 						INVOICE_IMAGE_COLUMN + " BLOB, " +
 						PURCHASE_DATE_COLUMN + " date)"

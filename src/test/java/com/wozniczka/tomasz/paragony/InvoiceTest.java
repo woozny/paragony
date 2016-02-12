@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,8 +16,7 @@ public class InvoiceTest {
 	public static final String PURCHASE_DATE = "1016-10-01";
 	private static final String HEADPHONES = "Headphones";
 	private static final String INVOICE_IMAGE_PATH = "src/test/TestResources/427572.jpg";
-	//private static final String INCORRECT_INVOICE_IMAGE_PATH = "test427572.jpg";
-	private static final int PRICE = 400;
+	private static final BigDecimal PRICE = new BigDecimal("145.61");
 	private final BufferedImage sampleInvoiceImage = loadInvoiceImage(INVOICE_IMAGE_PATH);
 	private Invoice invoice;
 
