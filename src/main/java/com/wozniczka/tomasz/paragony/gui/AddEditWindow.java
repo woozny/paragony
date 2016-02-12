@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 
 public class AddEditWindow {
@@ -53,7 +54,7 @@ public class AddEditWindow {
 
 	private void loadDataFormInvoice() {
 		nameTextField.setText(invoice.getProductName());
-		priceTextField.setText(Double.toString(invoice.getProductPrice()));
+		priceTextField.setText(invoice.getProductPrice().toString());
 		purchaseTextField.setText(invoice.getPurchaseDateAsString());
 		guaranteeTextField.setText(Integer.toString(invoice.getGuaranteePeriod()));
 		fileChooserButton.setText("Choose new file");
@@ -166,7 +167,7 @@ public class AddEditWindow {
 			Invoice newInvoice = new Invoice();
 			newInvoice.setProductName(nameTextField.getText());
 			newInvoice.setPurchaseDate(purchaseTextField.getText());
-			newInvoice.setProductPrice(Double.parseDouble(priceTextField.getText()));
+			newInvoice.setProductPrice(new BigDecimal(priceTextField.getText()));
 			newInvoice.setGuaranteePeriod(Integer.parseInt(guaranteeTextField.getText()));
 			newInvoice.addInvoiceImage(invoiceImagePath);
 			try {
@@ -192,7 +193,7 @@ public class AddEditWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			invoice.setProductName(nameTextField.getText());
-			invoice.setProductPrice(Double.parseDouble(priceTextField.getText()));
+			invoice.setProductPrice(new BigDecimal(priceTextField.getText()));
 			invoice.setPurchaseDate(purchaseTextField.getText());
 			invoice.setGuaranteePeriod(Integer.parseInt(guaranteeTextField.getText()));
 			if (invoiceImagePath != null) invoice.addInvoiceImage(invoiceImagePath);
