@@ -110,6 +110,7 @@ public class AddEditWindow {
 
 		//add input verifiers
 		guaranteeTextField.setInputVerifier(new GuaranteeVerifier());
+		priceTextField.setInputVerifier(new PriceVerifier());
 
 		//add fields to window
 		nameRow.add(nameLabel, BorderLayout.WEST);
@@ -220,6 +221,31 @@ public class AddEditWindow {
 				return false;
 			}
 			guaranteeTextField.setBackground(Color.white);
+			addButton.setEnabled(true);
+			return true;
+		}
+	}
+
+	private class PriceVerifier extends InputVerifier {
+
+		@Override
+		public boolean verify(JComponent input) {
+			String text = ((JTextField) input).getText();
+			String[] splitVals = text.split("\\.");
+
+			try {
+				Double.parseDouble(text);
+			} catch (NumberFormatException e) {
+				priceTextField.setBackground(Color.red);
+				addButton.setEnabled(false);
+				return false;
+			}
+			if (splitVals[0].length() > 8) {
+				priceTextField.setBackground(Color.red);
+				addButton.setEnabled(false);
+				return false;
+			}
+			priceTextField.setBackground(Color.white);
 			addButton.setEnabled(true);
 			return true;
 		}
