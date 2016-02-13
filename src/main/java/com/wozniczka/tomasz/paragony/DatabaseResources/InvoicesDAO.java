@@ -24,6 +24,7 @@ public class InvoicesDAO {
 
 	private static PreparedStatement psInsert;
 	private static PreparedStatement psUpdate;
+	private static PreparedStatement psDelete;
 	public final EmbeddedDatabaseConnection dbConnection;
 	private final Connection connection;
 	private final Statement statement;
@@ -42,6 +43,7 @@ public class InvoicesDAO {
 		}
 		configureInsertStatement();
 		configureUpdateStatement();
+		configureDeleteStatement();
 	}
 
 	public void insertInvoiceToDb(Invoice invoice) throws SQLException {
@@ -71,6 +73,16 @@ public class InvoicesDAO {
 		connection.commit();
 
 		System.out.println("Invoice has been updated");
+	}
+
+	public void deleteInvoiceFromDb(Invoice invoice) throws SQLException {
+		psDelete.setInt(1, invoice.getId());
+
+		psDelete.executeUpdate();
+
+		connection.commit();
+
+		System.out.println("Invoice has been deleted");
 	}
 
 	public List<Invoice> selectAllInvoicesFormDB() throws SQLException {
@@ -114,7 +126,7 @@ public class InvoicesDAO {
 						"(" +
 						ID_COLUMN + " int NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
 						PRODUCT_NAME_COLUMN + " varchar(100), " +
-						PRODUCT_PRICE_COLUMN + " DECIMAL(10, 2), " +
+						PRODUCT_PRICE_COLUMN + " DECIMAL(10,2), " +
 						GUARANTEE_COLUMN + " int, " +
 						INVOICE_IMAGE_COLUMN + " BLOB, " +
 						PURCHASE_DATE_COLUMN + " date)"
@@ -155,6 +167,16 @@ public class InvoicesDAO {
 		}
 	}
 
+	private void configureDeleteStatement() {
+		try {
+			psDelete = connection.prepareStatement("DELETE FROM " + TABLE_NAME +
+					" WHERE " + ID_COLUMN + "=?");
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+	}
+
 	private Date convertJavaDateToSqlDate(java.util.Date purchaseDate) {
 		return new Date(purchaseDate.getTime());
 	}
@@ -178,6 +200,4 @@ public class InvoicesDAO {
 		}
 		return bufferedImage;
 	}
-
-
 }

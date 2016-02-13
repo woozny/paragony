@@ -117,6 +117,7 @@ public class MainWindow {
 		downloadButton.addActionListener(new DownloadButton());
 
 		deleteButton = new JButton("Delete");
+		deleteButton.addActionListener(new DeleteButton());
 
 		printButton = new JButton("Print");
 
@@ -128,8 +129,17 @@ public class MainWindow {
 	}
 
 	private Invoice selectInvoiceForEditing() {
-		//TODO: Display popup window when nothing is selected
-		return allInvoices.get(table.getSelectedRow());
+		Invoice selectedInvoice;
+		try {
+			selectedInvoice = allInvoices.get(table.getSelectedRow());
+			return selectedInvoice;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			JOptionPane.showMessageDialog(frame,
+					"Invoice has been not selected",
+					"Selection Error",
+					JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
 	}
 
 	private class AddButton implements ActionListener {
@@ -144,14 +154,41 @@ public class MainWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new AddEditWindow(mainWindow, dao, selectInvoiceForEditing());
+			Invoice selectedInvoice = selectInvoiceForEditing();
+			if (selectedInvoice != null) new AddEditWindow(mainWindow, dao, selectedInvoice);
+
 		}
 	}
 
 	private class DeleteButton implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			Invoice selectedInvoice = selectInvoiceForEditing();
+			String productName = (selectedInvoice != null) ? selectedInvoice.getProductName() : "unknown";
+			Object[] options = {"Yes", "No"};
+			int answer;
+			if (selectedInvoice != null) {
+				answer = JOptionPane.showOptionDialog(
+						frame,
+						"Do you really want to delete " + productName + " invoice?",
+						"Delete " + productName + " invoice",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,
+						options,
+						1
+				);
+			} else {
+				answer = 1;
+			}
+			try {
+				if (answer == 0) {
+					dao.deleteInvoiceFromDb(selectedInvoice);
+					refreshData();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 
 		}
 	}
@@ -162,16 +199,19 @@ public class MainWindow {
 		public void actionPerformed(ActionEvent e) {
 			String writePath;
 			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			int returnVal = fileChooser.showSaveDialog(frame);
+			Invoice selectedInvoice = selectInvoiceForEditing();
 
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				writePath = fileChooser.getSelectedFile().toString();
-				ImageHandler.writeInvoiceImageToDisk(selectInvoiceForEditing(), writePath);
+			if (selectedInvoice != null) {
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int returnVal = fileChooser.showSaveDialog(frame);
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					writePath = fileChooser.getSelectedFile().toString();
+					ImageHandler.writeInvoiceImageToDisk(selectedInvoice, writePath);
+				}
 			}
 
 		}
 	}
-
 
 }
