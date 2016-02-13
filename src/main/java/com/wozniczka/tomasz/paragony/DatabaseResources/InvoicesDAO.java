@@ -114,7 +114,7 @@ public class InvoicesDAO {
 						"(" +
 						ID_COLUMN + " int NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
 						PRODUCT_NAME_COLUMN + " varchar(100), " +
-						PRODUCT_PRICE_COLUMN + " DECIMAL(10,2), " +
+						PRODUCT_PRICE_COLUMN + " DECIMAL(10, 2), " +
 						GUARANTEE_COLUMN + " int, " +
 						INVOICE_IMAGE_COLUMN + " BLOB, " +
 						PURCHASE_DATE_COLUMN + " date)"

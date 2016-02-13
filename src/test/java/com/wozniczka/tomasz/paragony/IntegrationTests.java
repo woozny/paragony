@@ -12,7 +12,6 @@ import java.util.List;
 public class IntegrationTests {
 
 	private static final String INVOICE_IMAGE_PATH = "src/test/TestResources/427572.jpg";
-	private static final BigDecimal PRICE = new BigDecimal("145.61");
 	private List<Invoice> invoices;
 
 	//TODO: clean this mess
@@ -28,13 +27,13 @@ public class IntegrationTests {
 
 		i.setProductName("Sluchawki");
 		i.setGuaranteePeriod(2);
-		i.setProductPrice(PRICE);
+		i.setProductPrice(new BigDecimal(400));
 		i.setPurchaseDate("2015-01-10");
 		i.addInvoiceImage(INVOICE_IMAGE_PATH);
 
 		i2.setProductName("Kebab");
 		i2.setGuaranteePeriod(1);
-		i2.setProductPrice(PRICE);
+		i2.setProductPrice(new BigDecimal(100));
 		i2.setPurchaseDate("2016-03-10");
 		i2.addInvoiceImage(INVOICE_IMAGE_PATH);
 
