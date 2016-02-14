@@ -22,6 +22,7 @@ public class MainWindow {
 	private final InvoicesDAO dao;
 	private List<Invoice> allInvoices;
 	private JFrame frame;
+	private JTabbedPane tabs;
 	private JTable table;
 	private JPanel buttonsRow;
 	private JButton addButton;
@@ -61,11 +62,14 @@ public class MainWindow {
 
 	private void prepareMainWindow() {
 		frame = new JFrame();
+		tabs = new JTabbedPane();
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(600, 300);
 		frame.setTitle("Invoice Manager");
 		buttonsRow = new JPanel();
 
+		frame.getContentPane().add(tabs, BorderLayout.CENTER);
 		prepareTable(allInvoices);
 		prepareButtons();
 
@@ -91,14 +95,17 @@ public class MainWindow {
 
 		table = new JTable(data, columnNames);
 
-		if (scrollPane != null) {
-			frame.getContentPane().remove(scrollPane);
-		}
+		//if (scrollPane != null) frame.getContentPane().remove(scrollPane);
+
 		scrollPane = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(SINGLE_SELECTION);
 
-		frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+		tabs.removeAll();
+
+		tabs.addTab("Invoices", scrollPane);
+		tabs.add("Alerts", null);
+
 	}
 
 	private void prepareButtons() {
