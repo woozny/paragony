@@ -1,6 +1,7 @@
 package com.wozniczka.tomasz.paragony.gui;
 
 import com.wozniczka.tomasz.paragony.DatabaseResources.InvoicesDAO;
+import com.wozniczka.tomasz.paragony.GuaranteeHandler;
 import com.wozniczka.tomasz.paragony.Invoice;
 import com.wozniczka.tomasz.paragony.images.ImageHandler;
 
@@ -11,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
@@ -23,7 +25,8 @@ public class MainWindow {
 	private List<Invoice> allInvoices;
 	private JFrame frame;
 	private JTabbedPane tabs;
-	private JTable table;
+	private JTable invoicesTable;
+	private JTable alertsTable;
 	private JPanel buttonsRow;
 	private JButton addButton;
 	private JButton editButton;
@@ -52,7 +55,9 @@ public class MainWindow {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		prepareTable(allInvoices);
+		tabs.removeAll();
+		prepareInvoiceTable(allInvoices);
+		prepareAlertTable(allInvoices);
 		frame.revalidate();
 	}
 
@@ -70,7 +75,8 @@ public class MainWindow {
 		buttonsRow = new JPanel();
 
 		frame.getContentPane().add(tabs, BorderLayout.CENTER);
-		prepareTable(allInvoices);
+		prepareInvoiceTable(allInvoices);
+		prepareAlertTable(allInvoices);
 		prepareButtons();
 
 		frame.addWindowListener(new WindowAdapter() {
@@ -83,7 +89,31 @@ public class MainWindow {
 		frame.setVisible(true);
 	}
 
-	private void prepareTable(List<Invoice> invoices) {
+	private void prepareAlertTable(List<Invoice> invoices) {
+		List<Invoice> invoicesWithInvalidGuarantee = new ArrayList<>();
+		for (Invoice i : invoices) {
+			if (!GuaranteeHandler.isGuaranteeValid(i)) invoicesWithInvalidGuarantee.add(i);
+		}
+
+		Object[][] data = new Object[invoicesWithInvalidGuarantee.size()][columnNames.length];
+
+		for (int i = 0; i < invoicesWithInvalidGuarantee.size(); i++) {
+			data[i][0] = invoicesWithInvalidGuarantee.get(i).getProductName();
+			data[i][1] = invoicesWithInvalidGuarantee.get(i).getProductPrice() + " " + CURRENCY;
+			data[i][2] = invoicesWithInvalidGuarantee.get(i).getPurchaseDateAsString();
+			data[i][3] = invoicesWithInvalidGuarantee.get(i).getGuaranteePeriod();
+		}
+
+		alertsTable = new JTable(data, columnNames);
+
+		scrollPane = new JScrollPane(alertsTable);
+		alertsTable.setFillsViewportHeight(true);
+		alertsTable.setSelectionMode(SINGLE_SELECTION);
+
+		tabs.add("Alerts", scrollPane);
+	}
+
+	private void prepareInvoiceTable(List<Invoice> invoices) {
 		Object[][] data = new Object[invoices.size()][columnNames.length];
 
 		for (int i = 0; i < invoices.size(); i++) {
@@ -93,18 +123,16 @@ public class MainWindow {
 			data[i][3] = invoices.get(i).getGuaranteePeriod();
 		}
 
-		table = new JTable(data, columnNames);
+		invoicesTable = new JTable(data, columnNames);
 
 		//if (scrollPane != null) frame.getContentPane().remove(scrollPane);
 
-		scrollPane = new JScrollPane(table);
-		table.setFillsViewportHeight(true);
-		table.setSelectionMode(SINGLE_SELECTION);
+		scrollPane = new JScrollPane(invoicesTable);
+		invoicesTable.setFillsViewportHeight(true);
+		invoicesTable.setSelectionMode(SINGLE_SELECTION);
 
-		tabs.removeAll();
 
 		tabs.addTab("Invoices", scrollPane);
-		tabs.add("Alerts", null);
 
 	}
 
@@ -138,7 +166,7 @@ public class MainWindow {
 	private Invoice selectInvoiceForEditing() {
 		Invoice selectedInvoice;
 		try {
-			selectedInvoice = allInvoices.get(table.getSelectedRow());
+			selectedInvoice = allInvoices.get(invoicesTable.getSelectedRow());
 			return selectedInvoice;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			JOptionPane.showMessageDialog(frame,
