@@ -112,6 +112,7 @@ public class MainWindow {
 		alertsTable.setSelectionMode(SINGLE_SELECTION);
 
 		tabs.add("Alerts", scrollPane);
+		setAlertStatus();
 	}
 
 	private void prepareInvoiceTable(List<Invoice> invoices) {
@@ -125,8 +126,6 @@ public class MainWindow {
 		}
 
 		invoicesTable = new JTable(data, columnNames);
-
-		//if (scrollPane != null) frame.getContentPane().remove(scrollPane);
 
 		scrollPane = new JScrollPane(invoicesTable);
 		invoicesTable.setFillsViewportHeight(true);
@@ -187,7 +186,6 @@ public class MainWindow {
 
 		}
 
-
 	}
 
 	private void showSelectionErrorPopup() {
@@ -195,6 +193,15 @@ public class MainWindow {
 				"Invoice has been not selected",
 				"Selection Error",
 				JOptionPane.ERROR_MESSAGE);
+	}
+
+	private void setAlertStatus() {
+		int amountOfInvalidInvoices = invoicesWithInvalidGuarantee.size();
+		String invoiceText = (amountOfInvalidInvoices <= 1) ? "invoice" : "invoices";
+
+		if (amountOfInvalidInvoices > 0) {
+			tabs.setTitleAt(1, "You have " + amountOfInvalidInvoices + " outdated " + invoiceText);
+		}
 	}
 
 	private class AddButton implements ActionListener {
@@ -268,5 +275,4 @@ public class MainWindow {
 
 		}
 	}
-
 }
