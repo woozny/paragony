@@ -1,7 +1,6 @@
 package com.wozniczka.tomasz.paragony.gui;
 
 import com.wozniczka.tomasz.paragony.DatabaseResources.InvoicesDAO;
-import com.wozniczka.tomasz.paragony.GuaranteeHandler;
 import com.wozniczka.tomasz.paragony.Invoice;
 import com.wozniczka.tomasz.paragony.images.ImageHandler;
 
@@ -15,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wozniczka.tomasz.paragony.GuaranteeHandler.isGuaranteeValid;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 
 public class MainWindow {
@@ -28,11 +28,6 @@ public class MainWindow {
 	private JTable invoicesTable;
 	private JTable alertsTable;
 	private JPanel buttonsRow;
-	private JButton addButton;
-	private JButton editButton;
-	private JButton deleteButton;
-	private JButton downloadButton;
-	private JButton printButton;
 
 	private MainWindow mainWindow;
 	private JScrollPane scrollPane;
@@ -93,7 +88,7 @@ public class MainWindow {
 	private void prepareAlertTable(List<Invoice> invoices) {
 		invoicesWithInvalidGuarantee = new ArrayList<>();
 		for (Invoice i : invoices) {
-			if (!GuaranteeHandler.isGuaranteeValid(i)) invoicesWithInvalidGuarantee.add(i);
+			if (!isGuaranteeValid(i)) invoicesWithInvalidGuarantee.add(i);
 		}
 
 		Object[][] data = new Object[invoicesWithInvalidGuarantee.size()][columnNames.length];
@@ -139,22 +134,22 @@ public class MainWindow {
 	private void prepareButtons() {
 		frame.getContentPane().add(buttonsRow, BorderLayout.SOUTH);
 
-		addButton = new JButton("Add");
+		JButton addButton = new JButton("Add");
 		addButton.addActionListener(new AddButton());
 
-		editButton = new JButton("Edit");
+		JButton editButton = new JButton("Edit");
 		editButton.addActionListener(new EditButton());
 
-		deleteButton = new JButton("Delete");
+		JButton deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(new DeleteButton());
 
-		downloadButton = new JButton("Download");
+		JButton downloadButton = new JButton("Download");
 		downloadButton.addActionListener(new DownloadButton());
 
 		deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(new DeleteButton());
 
-		printButton = new JButton("Print");
+		JButton printButton = new JButton("Print");
 
 		buttonsRow.add(addButton);
 		buttonsRow.add(editButton);
