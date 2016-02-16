@@ -13,7 +13,7 @@ public class GuaranteeHandler {
 		purchaseTime.setTime(purchaseDate);
 		purchaseTime.add(Calendar.YEAR, guarantee);
 
-		return purchaseTime.getTimeInMillis() >= currentTime.getTimeInMillis();
+		return purchaseTime.after(currentTime);
 	}
 
 }
