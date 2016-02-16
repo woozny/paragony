@@ -36,6 +36,7 @@ public class MainWindow {
 
 	private MainWindow mainWindow;
 	private JScrollPane scrollPane;
+	private List<Invoice> invoicesWithInvalidGuarantee;
 
 
 	public MainWindow(InvoicesDAO dao) {
@@ -90,7 +91,7 @@ public class MainWindow {
 	}
 
 	private void prepareAlertTable(List<Invoice> invoices) {
-		List<Invoice> invoicesWithInvalidGuarantee = new ArrayList<>();
+		invoicesWithInvalidGuarantee = new ArrayList<>();
 		for (Invoice i : invoices) {
 			if (!GuaranteeHandler.isGuaranteeValid(i)) invoicesWithInvalidGuarantee.add(i);
 		}
@@ -165,16 +166,35 @@ public class MainWindow {
 
 	private Invoice selectInvoiceForEditing() {
 		Invoice selectedInvoice;
-		try {
-			selectedInvoice = allInvoices.get(invoicesTable.getSelectedRow());
-			return selectedInvoice;
-		} catch (ArrayIndexOutOfBoundsException e) {
-			JOptionPane.showMessageDialog(frame,
-					"Invoice has been not selected",
-					"Selection Error",
-					JOptionPane.ERROR_MESSAGE);
-			return null;
+		int activeTab = tabs.getSelectedIndex();
+
+		if (activeTab == 0) {
+			try {
+				selectedInvoice = allInvoices.get(invoicesTable.getSelectedRow());
+				return selectedInvoice;
+			} catch (ArrayIndexOutOfBoundsException e) {
+				showSelectionErrorPopup();
+				return null;
+			}
+		} else {
+			try {
+				selectedInvoice = invoicesWithInvalidGuarantee.get(alertsTable.getSelectedRow());
+				return selectedInvoice;
+			} catch (ArrayIndexOutOfBoundsException e) {
+				showSelectionErrorPopup();
+				return null;
+			}
+
 		}
+
+
+	}
+
+	private void showSelectionErrorPopup() {
+		JOptionPane.showMessageDialog(frame,
+				"Invoice has been not selected",
+				"Selection Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	private class AddButton implements ActionListener {
