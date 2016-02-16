@@ -30,8 +30,6 @@ public class InvoicesDAO {
 	private final Statement statement;
 	private ResultSet resultSet;
 
-	//TODO: Update and Delete statements
-
 	public InvoicesDAO(EmbeddedDatabaseConnection dbConnection) {
 		this.dbConnection = dbConnection;
 		statement = dbConnection.getStatement();

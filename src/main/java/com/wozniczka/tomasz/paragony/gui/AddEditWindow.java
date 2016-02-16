@@ -149,6 +149,16 @@ public class AddEditWindow {
 		return path;
 	}
 
+	private String convertPrice(String price) {
+		String text;
+		if (price.contains(",")) {
+			text = price.replace(",", ".");
+		} else {
+			text = price;
+		}
+		return text;
+	}
+
 	private class InvoiceImageSelector implements ActionListener {
 
 		@Override
@@ -168,7 +178,7 @@ public class AddEditWindow {
 			Invoice newInvoice = new Invoice();
 			newInvoice.setProductName(nameTextField.getText());
 			newInvoice.setPurchaseDate(purchaseTextField.getText());
-			newInvoice.setProductPrice(new BigDecimal(priceTextField.getText()));
+			newInvoice.setProductPrice(new BigDecimal(convertPrice(priceTextField.getText())));
 			newInvoice.setGuaranteePeriod(Integer.parseInt(guaranteeTextField.getText()));
 			newInvoice.addInvoiceImage(invoiceImagePath);
 			try {
@@ -194,7 +204,7 @@ public class AddEditWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			invoice.setProductName(nameTextField.getText());
-			invoice.setProductPrice(new BigDecimal(priceTextField.getText()));
+			invoice.setProductPrice(new BigDecimal(convertPrice(priceTextField.getText())));
 			invoice.setPurchaseDate(purchaseTextField.getText());
 			invoice.setGuaranteePeriod(Integer.parseInt(guaranteeTextField.getText()));
 			if (invoiceImagePath != null) invoice.addInvoiceImage(invoiceImagePath);
@@ -230,7 +240,8 @@ public class AddEditWindow {
 
 		@Override
 		public boolean verify(JComponent input) {
-			String text = ((JTextField) input).getText();
+			String text = convertPrice(((JTextField) input).getText());
+
 			String[] splitVals = text.split("\\.");
 
 			try {
