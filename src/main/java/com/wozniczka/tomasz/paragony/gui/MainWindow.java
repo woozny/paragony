@@ -3,6 +3,7 @@ package com.wozniczka.tomasz.paragony.gui;
 import com.wozniczka.tomasz.paragony.DatabaseResources.InvoicesDAO;
 import com.wozniczka.tomasz.paragony.Invoice;
 import com.wozniczka.tomasz.paragony.images.ImageHandler;
+import com.wozniczka.tomasz.paragony.images.InvoicePrinter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -150,6 +153,7 @@ public class MainWindow {
 		deleteButton.addActionListener(new DeleteButton());
 
 		JButton printButton = new JButton("Print");
+		printButton.addActionListener(new PrintButton());
 
 		buttonsRow.add(addButton);
 		buttonsRow.add(editButton);
@@ -268,6 +272,21 @@ public class MainWindow {
 				}
 			}
 
+		}
+	}
+
+	private class PrintButton implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			PrinterJob job = PrinterJob.getPrinterJob();
+			job.setPrintable(new InvoicePrinter(selectInvoiceForEditing()));
+			boolean ok = job.printDialog();
+			if (ok) {
+				try {
+					job.print();
+				} catch (PrinterException ex) {
+		      /* The job did not successfully complete */
+				}
+			}
 		}
 	}
 }
